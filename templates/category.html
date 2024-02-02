@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:150 }}
+    {% else %}
+        Welcome to my Store
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+    {{ category.name }}
+{% else %}
+    Our new collections
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if category %}
+<div class="container">
+    <div class="row">
+        <!-- <div class="col-12 producttimg">
+            <img src="{{ category.image.url }}" alt="{{ category.name }}">
+        </div> -->
+        <div class="col-12 txt1 pb-2">
+            <h1>{{ category.name }}</h1>
+        </div>
+        <div class="col-12 txt1 pb-3">
+            <p>{{ category.description }}</p> 
+        </div>
+        {% for cat in categ %}
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-12 prodimg">
+                    <a href="{{ cat.get_url }}"><img src="{{ cat.image.url }}" alt="{{ cat.name }}"></a>                        
+                </div>
+                <div class="col-12 proddetail">
+                    <div class="row">
+                        <div class="col-md-12 pname">
+                            <h6 class="">{{ cat.name }}</h6>
+                        </div>
+                        <div class="col-md-12 prate">
+                            <p class="text-muted">{{ cat.price }}₹</p>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 homeimg">
+            <img class="" src="{% static 'img/homeimg5.jpeg' %}" alt="Product">
+            <div class="overlay-text">Food Shop</div>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 txt1 mt-5">
+                    <h1>Our products collections</h1>
+                </div>
+                <div class="col-12 txt2 mt-3">
+                    <p>It is a long established fact that a reader will be distracted by the readable content oa page when looking at its layout. The point of using Lorem Ipsum is that it has more-or-less normal distribution of letters, as opposed to using 'Content here, contenhere', making it look like readable English. Many desktop publishing packages and web pageditors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' wiluncover many web sites still in their infancy.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12 productalignment">
+            <div class="row ">
+                {% for product in products.object_list %}
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-12 prodimg">
+                            <a href="{{ product.get_url }}"><img src="{{ product.image.url }}" alt="{{ product.name }}"></a>                        
+                        </div>
+                        <div class="col-12 proddetail">
+                            <div class="row">
+                                <div class="col-md-12 pname">
+                                    <h6 class="">{{ product.name }}</h6>
+                                </div>
+                                <div class="col-md-12 prate">
+                                    <p class="text-muted">{{ product.price }}₹</p>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div><br>
+    </div> 
+
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %} 
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

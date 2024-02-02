@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    This is cart  page proceed to review your items and place the order
+{% endblock %}
+
+{% block title %}
+    Food Shop Company
+{% endblock %}
+
+{% block content %}
+{% if not cart_items %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 txt1">
+                <h1 class="mb-4">Your cart page is empty</h1><br>
+                <p class="text-center">Click <a href="{% url 'shop:allproduct' %}">Here</a> to continue shoping</p>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-12 carthead txt4 mb-5">
+                        <h4 class="">Your cart items</h4>
+                    </div>
+                    {% for cart_item in cart_items %}
+                    <div class="col-md-4 mb-4 cartimgstyle">
+                        <a href="{{ cart_item.product.get_absolute_ur }}"><img src="{{ cart_item.product.image.url }}" alt="image"></a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="row productalignment">
+                            <div class="col-12 txt3">
+                                <h5>{{ cart_item.product.name }}</h5>
+                            </div>
+                            <div class="col-12 txt3">
+                                <h6 class="text-muted">Price : {{ cart_item.product.price }}₹</h6>
+                            </div>
+                            <div class="col-12 txt3">
+                                <h6 class="text-muted">Qty : {{ cart_item.quantity }} x {{ cart_item.product.price }}₹</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-4 txt3 txt2">
+                        <h6>Total: {{ cart_item.sub_total }}₹</h6>
+                    </div>
+                    <div class="col-md-2 mb-4">
+                        <div class="row">
+                            {% if cart_item.quantity < cart_item.product.stock %}
+                            <div class="col-12 iconcolor">
+                                <a href="{% url 'cart:add_cart' cart_item.product.id %}"><i class="fa-solid fa-plus"></i></a>
+                            </div>
+                            <div class="col-12 iconcolor">
+                                <a href="{% url 'cart:cart_remove' cart_item.product.id %}"><i class="fa-solid fa-minus"></i></a>
+                            </div>
+                            <div class="col-12 iconcolor">
+                                <a href="{% url 'cart:cart_delete' cart_item.product.id %}"><i class="fa-solid fa-trash"></i></a>
+                            </div>
+                            {% else %}
+                            <div class="col-12 iconcolor">
+                                <a href="{% url 'cart:cart_remove' cart_item.product.id %}"><i class="fa-solid fa-minus"></i></a>
+                            </div>
+                            <div class="col-12 iconcolor">
+                                <a href="{% url 'cart:cart_delete' cart_item.product.id %}"><i class="fa-solid fa-trash"></i></a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div> <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">       
+                    <div class="col-12 carthead txt4 mb-5">
+                        <h4>Checkout</h4>
+                    </div>
+                    <div class="col-12 txt1">
+                        <div class="row">
+                            <div class="col-12 txt1 text-center">
+                                <p>Net amout is: <b>{{ total }}₹</b></p>
+                            </div>
+                            <div class="col-12 txt4 text-center">
+                                <a class="btn btn-outline-secondary" href="{% url 'shop:allproduct' %}"><span style="padding-right: 10px;">Continue Shopping</span><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+    {% endblock %}
